@@ -3,10 +3,10 @@
 PACKAGES_SIMTEST=$(shell go list ./... | grep '/simulation')
 VERSION := $(shell echo $(shell git describe --tags) | sed 's/^v//')
 COMMIT := $(shell git log -1 --format='%H')
-LEDGER_ENABLED ?= true
+LEDGER_ENABLED ?= false
 SDK_PACK := $(shell go list -m github.com/cosmos/cosmos-sdk | sed  's/ /\@/g')
 
-export GO111MODULE = on
+export GO111MODULE = off
 
 # process build tags
 
@@ -72,8 +72,8 @@ ifeq ($(OS),Windows_NT)
 	go build -mod=readonly $(BUILD_FLAGS) -o build/gaiad.exe ./cmd/gaiad
 	go build -mod=readonly $(BUILD_FLAGS) -o build/gaiacli.exe ./cmd/gaiacli
 else
-	go build -mod=readonly $(BUILD_FLAGS) -o build/gaiad ./cmd/gaiad
-	go build -mod=readonly $(BUILD_FLAGS) -o build/gaiacli ./cmd/gaiacli
+	go build $(BUILD_FLAGS) -o build/gaiad ./cmd/gaiad
+	go build $(BUILD_FLAGS) -o build/gaiacli ./cmd/gaiacli
 endif
 
 build-linux: go.sum
@@ -87,8 +87,8 @@ else
 endif
 
 install: go.sum
-	go install -mod=readonly $(BUILD_FLAGS) ./cmd/gaiad
-	go install -mod=readonly $(BUILD_FLAGS) ./cmd/gaiacli
+	go install $(BUILD_FLAGS) ./cmd/gaiad
+	go install $(BUILD_FLAGS) ./cmd/gaiacli
 
 install-debug: go.sum
 	go install -mod=readonly $(BUILD_FLAGS) ./cmd/gaiadebug
