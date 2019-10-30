@@ -7,7 +7,7 @@
 *.swn
 .vscode
 .idea
-
+cache
 # Build
 build
 tools/bin/*

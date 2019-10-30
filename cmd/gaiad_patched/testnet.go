@@ -3,7 +3,6 @@ package main
 // DONTCOVER
 
 import (
-	"bufio"
 	"encoding/json"
 	"fmt"
 	"net"
@@ -39,6 +38,7 @@ var (
 	flagNodeDaemonHome    = "node-daemon-home"
 	flagNodeCLIHome       = "node-cli-home"
 	flagStartingIPAddress = "starting-ip-address"
+	flagBaseport          = "base-port"
 )
 
 // get cmd to initialize all files for tendermint testnet and application
@@ -91,6 +91,7 @@ Example:
 	cmd.Flags().String(
 		server.FlagMinGasPrices, fmt.Sprintf("0.000006%s", sdk.DefaultBondDenom),
 		"Minimum gas prices to accept for transactions; All fees in a tx must meet this minimum (e.g. 0.01photino,0.001stake)")
+	cmd.Flags().Int(flagBaseport, 20056, "testnet base port")
 	return cmd
 }
 
@@ -118,6 +119,9 @@ func InitTestnet(cmd *cobra.Command, config *tmconfig.Config, cdc *codec.Codec,
 		genFiles []string
 	)
 
+	//accs = addAccount("okchain10q0rk5qnyag7wfvvt7rtphlw589m7frsmyq4ya", 6 * 1e9, accs)
+	//accs = addAccount("okchain1v853tq96n9ghvyxlvqyxyj97589clccr33yr7a", 9 * 1e9, accs)
+
 	// generate private keys, node IDs, and initial transactions
 	for i := 0; i < numValidators; i++ {
 		nodeDirName := fmt.Sprintf("%s%d", nodeDirPrefix, i)
@@ -141,7 +145,7 @@ func InitTestnet(cmd *cobra.Command, config *tmconfig.Config, cdc *codec.Codec,
 		monikers = append(monikers, nodeDirName)
 		config.Moniker = nodeDirName
 
-		ip, err := getIP(i, startingIPAddress)
+		ip, err := getIP(0, startingIPAddress)
 		if err != nil {
 			_ = os.RemoveAll(outputDir)
 			return err
@@ -153,31 +157,23 @@ func InitTestnet(cmd *cobra.Command, config *tmconfig.Config, cdc *codec.Codec,
 			return err
 		}
 
-		memo := fmt.Sprintf("%s@%s:26656", nodeIDs[i], ip)
+		baseport := viper.GetInt(flagBaseport)
+		port := baseport + i*100
+		memo := fmt.Sprintf("%s@%s:%d", nodeIDs[i], ip, port) //okdex
 		genFiles = append(genFiles, config.GenesisFile())
 
-		buf := bufio.NewReader(cmd.InOrStdin())
-		prompt := fmt.Sprintf(
-			"Password for account '%s' (default %s):", nodeDirName, client.DefaultKeyPass,
-		)
-
-		keyPass, err := client.GetPassword(prompt, buf)
-		if err != nil && keyPass != "" {
-			// An error was returned that either failed to read the password from
-			// STDIN or the given password is not empty but failed to meet minimum
-			// length requirements.
-			return err
-		}
-
-		if keyPass == "" {
-			keyPass = client.DefaultKeyPass
-		}
-
+		keyPass := client.DefaultKeyPass
 		addr, secret, err := server.GenerateSaveCoinKey(clientDir, nodeDirName, keyPass, true)
 		if err != nil {
 			_ = os.RemoveAll(outputDir)
 			return err
 		}
+
+		fmt.Printf("clientDir: %s\n", clientDir)
+		fmt.Printf("nodeDirName: %s\n", nodeDirName)
+		fmt.Printf("addr: %s\n", addr)
+		fmt.Printf("secret: %s\n", secret)
+		fmt.Printf("-------------------\n")
 
 		info := map[string]string{"secret": secret}
 
@@ -192,7 +188,7 @@ func InitTestnet(cmd *cobra.Command, config *tmconfig.Config, cdc *codec.Codec,
 		}
 
 		accTokens := sdk.TokensFromConsensusPower(1000)
-		accStakingTokens := sdk.TokensFromConsensusPower(500)
+		accStakingTokens := sdk.TokensFromConsensusPower(1000000000)
 		accs = append(accs, genaccounts.GenesisAccount{
 			Address: addr,
 			Coins: sdk.Coins{
