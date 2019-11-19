@@ -90,6 +90,8 @@ install: go.sum
 	go install $(BUILD_FLAGS) ./cmd/gaiad
 	go install $(BUILD_FLAGS) ./cmd/gaiacli
 
+flooder:
+	go install $(BUILD_FLAGS) ./cmd/flooder
 
 install-debug: go.sum
 	go install -mod=readonly $(BUILD_FLAGS) ./cmd/gaiadebug

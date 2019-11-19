@@ -20,10 +20,7 @@ var mainCmd = &cobra.Command{
 	Long: `flooder is a very powerful cli tool for gaia-test. It supports JSON-file and Sub-command to stimulate transactions. 
 `,
 	Run: func(cmd *cobra.Command, args []string) {
-		if err := cmd.Help(); err != nil {
-			fmt.Println(err)
-			return
-		}
+		cmd.Help()
 		return
 	},
 }
