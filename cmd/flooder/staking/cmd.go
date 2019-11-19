@@ -1,12 +1,18 @@
 package staking
 
-import "github.com/spf13/cobra"
+import (
+	"fmt"
+	"github.com/spf13/cobra"
+)
 
 func GetStakingCmd() *cobra.Command {
 	var stakingCmd = &cobra.Command{
 		Use:   "staking",
-		Short: "just 4 staking test",
-		Long:  "just 4 staking test",
+		Short: "do something for validator or delegation",
+		Long:  "do something for validator or delegation",
+		Run: func(cmd *cobra.Command, args []string) {
+			fmt.Println("staking hahaha")
+		},
 	}
 	return stakingCmd
 }

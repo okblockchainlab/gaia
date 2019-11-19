@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"github.com/cosmos/gaia/cmd/flooder/account"
 	"github.com/cosmos/gaia/cmd/flooder/config"
 	"github.com/cosmos/gaia/cmd/flooder/staking"
 	"github.com/spf13/cobra"
@@ -42,6 +43,7 @@ func init() {
 }
 
 func main() {
+	mainCmd.AddCommand(account.GetAccountCmd())
 	mainCmd.AddCommand(staking.GetStakingCmd())
 	Execute()
 }
