@@ -8,11 +8,11 @@ import (
 )
 
 const (
-	gaiaUrl = "tcp://localhost:26657"
+	GaiaUrl = "tcp://localhost:26657"
 )
 
 func TestQueryAccountInfo(t *testing.T) {
-	rpcClient := GetRPCClient(gaiaUrl)
+	rpcClient := GetRPCClient(GaiaUrl)
 	accountNum, SequenceNum, err := QueryAccountInfo(account.GetTuringInfo(), rpcClient)
 	require.NoError(t, err)
 	fmt.Println(accountNum,SequenceNum)

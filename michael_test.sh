@@ -18,3 +18,5 @@ gaiacli query staking validators
 
 gaiacli tx staking delegate cosmosvaloper16wdljyzt5nvdjwrd06jup9hvc8wwhn5u6yl7w5 10stake --from jack -yes -b block
 
+
+gaiacli query account cosmos1wfsqpu02dz5exmzn25yc899435js6wnd9nkmn4

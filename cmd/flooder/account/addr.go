@@ -12,7 +12,7 @@ const (
 	TuringName     = "Turing"
 	TuringMnemonic = "hover tumble cool toilet drop rhythm rude history provide man memory family strategy language tuna pool extend reform obey circle found usage scrub iron"
 
-	defaultEncryptPasswd = "12345678"
+	DefaultEncryptPasswd = "12345678"
 	defaultBip39Passwd   = ""
 	defaultAccountNumber = uint32(0)
 )
@@ -60,11 +60,11 @@ func genGoRoutine(kb keys.Keybase, indexChan chan uint32, accChan chan keys.Info
 
 		name := strconv.Itoa(int(i))
 
-		info, err := kb.CreateAccount(name, mnemonic, defaultBip39Passwd, defaultEncryptPasswd, defaultAccountNumber, i)
+		info, err := kb.CreateAccount(name, mnemonic, defaultBip39Passwd, DefaultEncryptPasswd, defaultAccountNumber, i)
 		if err != nil {
 			return err
 		}
-		fmt.Println(info.GetName() + info.GetAddress().String())
+		fmt.Println(fmt.Sprintf("%s:%s", info.GetName(), info.GetAddress().String()))
 		accChan <- info
 
 	}

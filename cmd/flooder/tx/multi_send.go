@@ -6,6 +6,7 @@ import (
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/x/bank"
 	"github.com/cosmos/gaia/cmd/flooder/utils"
+	"github.com/pkg/errors"
 	"strings"
 )
 
@@ -28,14 +29,14 @@ func MultiSend(from keys.Info, tos []keys.Info, coin sdk.Coin, nodeURI string, k
 
 	msgs := NewMultiSendMsg(from, tos, coin)
 
-	accountNumber, sequenceNum, err := QueryAccount(fromInfo, rpcClient)
+	txBldr := GetTxBuilder(0, 0, kb)
+
+	accountNumber, sequenceNum, err := utils.QueryAccountInfo(from, rpcClient)
 	if err != nil {
 		fmt.Println("query_account_error: ", err.Error())
 	}
-	//fmt.Printf("accountNumber: %d, sequenceNum: %d\n", accountNumber, sequenceNum)
 
-	txBldr := GetTxBuilder(0, 0, kb)
-	txBytes := BuildAndSign(fromInfo.GetName(), msgs, accountNumber, sequenceNum, txBldr)
+	txBytes := BuildAndSign(from.GetName(), msgs, accountNumber, sequenceNum, txBldr)
 	resp, err := rpcClient.BroadcastTxCommit(txBytes)
 	if err != nil {
 		//fmt.Println("BroadcastTxCommit_error: ", err)
