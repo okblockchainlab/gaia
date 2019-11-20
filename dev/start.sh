@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
-/killbyname.sh gaiad
-/killbyname.sh "gaiacli rest-server"
+./killbyname.sh gaiad
+./killbyname.sh "gaiacli rest-server"
 
 rm nohup.out
 

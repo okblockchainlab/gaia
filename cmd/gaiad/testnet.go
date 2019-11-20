@@ -163,7 +163,7 @@ func InitTestnet(cmd *cobra.Command, config *tmconfig.Config, cdc *codec.Codec,
 		genFiles = append(genFiles, config.GenesisFile())
 
 		keyPass := client.DefaultKeyPass
-		addr, secret, err := server.GenerateSaveCoinKey(clientDir, nodeDirName, keyPass, true)
+		addr, secret, err := server.GenerateSaveCoinKey(clientDir, nodeDirName, keyPass, true, getTestnetMnemonic(i))
 		if err != nil {
 			_ = os.RemoveAll(outputDir)
 			return err
@@ -367,4 +367,22 @@ func writeFile(name string, dir string, contents []byte) error {
 	}
 
 	return nil
+}
+
+
+
+var (
+	testnetAccountList = []string{
+		"hover tumble cool toilet drop rhythm rude history provide man memory family strategy language tuna pool extend reform obey circle found usage scrub iron",
+		"depart neither they audit pen exile fire smart tongue express blanket burden culture shove curve address together pottery suggest lady sell clap seek whisper",
+		"country live width exotic behind mad belt bachelor later outside forget rude pudding material orbit shoot kind curve endless prosper make exotic welcome maple",
+	}
+)
+
+func getTestnetMnemonic(index int) string {
+	if len(testnetAccountList) - 1 < index {
+		return ""
+	}
+
+	return testnetAccountList[index]
 }
