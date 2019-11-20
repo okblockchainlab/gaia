@@ -12,13 +12,20 @@ gaiacli config indent true
 #address
 #cosmos1hg40dv5e237qy28vtyum52ygke32ez35hm307h
 
-#cosmos1y5cj26cexle8mrpxfksnly2djzxx79zq00a6tz
+
+
 gaiacli keys add --recover val << EOF
-y
-sentence deputy little switch fiction balcony hollow iron net index sound hollow scare attitude only cushion best candy wonder phone napkin sketch announce derive
+hover tumble cool toilet drop rhythm rude history provide man memory family strategy language tuna pool extend reform obey circle found usage scrub iron
 EOF
 
-exit
+# cosmos16wdljyzt5nvdjwrd06jup9hvc8wwhn5ulsttz8
+gaiacli keys add --recover val << EOF
+y
+12345678
+hover tumble cool toilet drop rhythm rude history provide man memory family strategy language tuna pool extend reform obey circle found usage scrub iron
+EOF
+
+#exit
 gaiacli keys add --recover 307  << EOF
 12345678
 depart neither they audit pen exile fire smart tongue express blanket burden culture shove curve address together pottery suggest lady sell clap seek whisper
@@ -29,6 +36,7 @@ gaiacli keys add --recover q0 << EOF
 country live width exotic behind mad belt bachelor later outside forget rude pudding material orbit shoot kind curve endless prosper make exotic welcome maple
 EOF
 
+# cosmos1hg40dv5e237qy28vtyum52ygke32ez35hm307h
 gaiacli keys add --recover 307  << EOF
 y
 12345678
@@ -36,6 +44,7 @@ depart neither they audit pen exile fire smart tongue express blanket burden cul
 EOF
 
 
+# cosmos1geyy4wtak2q9effnfhze9u4htd8yxxmagdw3q0
 gaiacli keys add --recover q0 << EOF
 y
 12345678

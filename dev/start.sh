@@ -9,7 +9,7 @@ rm nohup.out
 
 rm -rf cache
 
-gaiad testnet --v 1 --output-dir cache --chain-id testchain --starting-ip-address 127.0.0.1<<EOF
+gaiad testnet --v 1 --output-dir cache --chain-id testchain --starting-ip-address 127.0.0.1 --home cache/node0/gaiad<<EOF
 12345678
 EOF
 
@@ -24,3 +24,6 @@ nohup gaiad start --home cache/node0/gaiad &
 #gaiad start --home cache/node0/gaiad
 
 nohup gaiacli rest-server &
+sleep 1
+
+tail -f nohup.out
