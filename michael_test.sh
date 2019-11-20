@@ -14,4 +14,7 @@ gaiacli keys add jack
 
 gaiacli tx send Turing cosmos18dsnjdq53jmk8c7d7w96fczpafjr6xjp5zyrjk 1000stake -yes -b block
 
-gai
+gaiacli query staking validators
+
+gaiacli tx staking delegate cosmosvaloper16wdljyzt5nvdjwrd06jup9hvc8wwhn5u6yl7w5 10stake --from jack -yes -b block
+

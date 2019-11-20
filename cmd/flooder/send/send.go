@@ -14,5 +14,5 @@ func GetSendCmd() *cobra.Command {
 }
 
 func goSend(*cobra.Command, []string) error {
-
+	return nil
 }

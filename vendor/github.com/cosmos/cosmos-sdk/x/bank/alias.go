@@ -30,6 +30,7 @@ var (
 	NewInput               = types.NewInput
 	NewOutput              = types.NewOutput
 	ParamKeyTable          = types.ParamKeyTable
+	NewMsgMultiSend        = types.NewMsgMultiSend
 
 	// variable aliases
 	ModuleCdc                = types.ModuleCdc
@@ -37,10 +38,10 @@ var (
 )
 
 type (
-	BaseKeeper   = keeper.BaseKeeper // ibc module depends on this
-	Keeper       = keeper.Keeper
-	MsgSend      = types.MsgSend
+	BaseKeeper = keeper.BaseKeeper // ibc module depends on this
+	Keeper = keeper.Keeper
+	MsgSend = types.MsgSend
 	MsgMultiSend = types.MsgMultiSend
-	Input        = types.Input
-	Output       = types.Output
+	Input = types.Input
+	Output = types.Output
 )
