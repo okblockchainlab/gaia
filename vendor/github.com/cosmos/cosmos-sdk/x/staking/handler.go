@@ -224,10 +224,10 @@ func handleMsgEditValidator(ctx sdk.Context, msg types.MsgEditValidator, k keepe
 }
 
 func handleMsgDelegate(ctx sdk.Context, msg types.MsgDelegate, k keeper.Keeper) sdk.Result {
-	validator, found := k.GetValidator(ctx, msg.ValidatorAddress)
-	if !found {
-		return ErrNoValidatorFound(k.Codespace()).Result()
-	}
+	//validator, found := k.GetValidator(ctx, msg.ValidatorAddress)
+	//if !found {
+	//	return ErrNoValidatorFound(k.Codespace()).Result()
+	//}
 
 	if msg.Amount.Denom != k.BondDenom(ctx) {
 		return ErrBadDenom(k.Codespace()).Result()
@@ -240,7 +240,12 @@ func handleMsgDelegate(ctx sdk.Context, msg types.MsgDelegate, k keeper.Keeper) 
 	//}
 
 	// additon: group delegation
-	for _,v:=range msg.DelegatorAddresses{
+	for _, v := range msg.DelegatorAddresses {
+		validator, found := k.GetValidator(ctx, msg.ValidatorAddress)
+		if !found {
+			return ErrNoValidatorFound(k.Codespace()).Result()
+		}
+
 		_, err := k.Delegate(ctx, v, msg.Amount.Amount, sdk.Unbonded, validator, true)
 		if err != nil {
 			return err.Result()
