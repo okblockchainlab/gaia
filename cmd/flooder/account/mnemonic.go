@@ -91,9 +91,14 @@ func mnemonicAndAddrToFile(*cobra.Command, []string) error {
 		content1,content2:=[]byte(v.Mnemonic),[]byte(v.Address)
 		content1=append(content1,0x0D)
 		content2=append(content2,0x0D)
-		w1.Write(content1)
-		w2.Write(content2)
-
+		_,err := w1.Write(content1)
+		if err != nil {
+			fmt.Println("error:",i,err,v)
+		}
+		_,err = w2.Write(content2)
+		if err != nil {
+			fmt.Println("error:",i,err,v)
+		}
 	}
 	return nil
 }
@@ -106,9 +111,9 @@ type Combination struct{
 
 
 func GenerateMnemonicAndAccInfo(kb keys.Keybase, genNum uint) []Combination {
-	indexChan := make(chan uint, 5000)
-	combinationChan := make(chan Combination, 5000)
-
+	indexChan := make(chan uint, 10000)
+	combinationChan := make(chan Combination, 10000)
+	fmt.Println("genNum",genNum)
 
 	for i := 0; i < goRoutineNum; i++ {
 		go genCombinations(kb, indexChan, combinationChan)
@@ -120,10 +125,10 @@ func GenerateMnemonicAndAccInfo(kb keys.Keybase, genNum uint) []Combination {
 	}
 
 	combinations := make([]Combination, 0)
-
 	var i uint
 	for ; i < genNum; i++ {
 		com := <-combinationChan
+		fmt.Println(i,com)
 		combinations = append(combinations, com)
 	}
 	return combinations
@@ -147,7 +152,7 @@ func genCombinations(kb keys.Keybase, indexChan chan uint, comChan chan Combinat
 		if err != nil {
 			return err
 		}
-		fmt.Println(fmt.Sprintf("%s:%s", info.GetName(), info.GetAddress().String()))
+		//fmt.Println(fmt.Sprintf("%s:%s", info.GetName(), info.GetAddress().String()))
 		comChan <- Combination{mnemonic,info.GetAddress().String()}
 
 	}
