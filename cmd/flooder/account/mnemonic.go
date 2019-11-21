@@ -149,7 +149,7 @@ func genCombinations(kb keys.Keybase, indexChan chan uint, comChan chan Combinat
 		if err != nil {
 			return err
 		}
-		//fmt.Println(fmt.Sprintf("%s:%s", info.GetName(), info.GetAddress().String()))
+		fmt.Println(fmt.Sprintf("%s:%s", info.GetName(), info.GetAddress().String()))
 		comChan <- Combination{mnemonic,info.GetAddress().String()}
 
 	}
