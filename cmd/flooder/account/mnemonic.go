@@ -109,6 +109,7 @@ func GenerateMnemonicAndAccInfo(kb keys.Keybase, genNum uint) []Combination {
 	indexChan := make(chan uint, 5000)
 	combinationChan := make(chan Combination, 5000)
 
+
 	for i := 0; i < goRoutineNum; i++ {
 		go genCombinations(kb, indexChan, combinationChan)
 	}
@@ -116,6 +117,9 @@ func GenerateMnemonicAndAccInfo(kb keys.Keybase, genNum uint) []Combination {
 	var addrIndex uint
 	for ; addrIndex < genNum; addrIndex++ {
 		indexChan <- addrIndex
+		if addrIndex%1000==0{
+			fmt.Println(addrIndex)
+		}
 	}
 
 	combinations := make([]Combination, 0)
