@@ -9,7 +9,7 @@ import (
 
 func TestGenerateAccount(t *testing.T) {
 	fmt.Println(runtime.GOMAXPROCS(4))
-	kb:=keys.NewInMemory()
-	accs:=GenerateAccount(kb,100)
+	kb := keys.NewInMemory()
+	accs := GenerateAccount(kb, 100)
 	fmt.Println(accs)
 }
