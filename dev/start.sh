@@ -20,10 +20,10 @@ gaiacli config indent true
 
 sleep 1
 
-nohup gaiad start --home cache/node0/gaiad &
+nohup gaiad start --log_level consensus:info,state:info --home cache/node0/gaiad &
 #gaiad start --home cache/node0/gaiad
 
 nohup gaiacli rest-server &
 sleep 1
 
-tail -f nohup.out
+tail -f nohup.out | grep interval

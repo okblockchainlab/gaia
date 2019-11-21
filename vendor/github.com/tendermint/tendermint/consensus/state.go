@@ -1384,6 +1384,8 @@ func (cs *ConsensusState) recordMetrics(height int64, block *types.Block) {
 		cs.metrics.BlockIntervalSeconds.Set(
 			block.Time.Sub(lastBlockMeta.Header.Time).Seconds(),
 		)
+		cs.Logger.Info(fmt.Sprintf("height:%d , block interval seconds:[%fs]",
+			block.Height, block.Time.Sub(lastBlockMeta.Header.Time).Seconds()))
 	}
 
 	cs.metrics.NumTxs.Set(float64(block.NumTxs))
