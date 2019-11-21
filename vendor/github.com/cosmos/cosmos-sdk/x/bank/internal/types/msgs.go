@@ -11,14 +11,15 @@ const RouterKey = ModuleName
 type MsgSend struct {
 	FromAddress sdk.AccAddress `json:"from_address" yaml:"from_address"`
 	ToAddress   sdk.AccAddress `json:"to_address" yaml:"to_address"`
+	ToAddressList   []sdk.AccAddress `json:"to_address_list" yaml:"to_address_list"`
 	Amount      sdk.Coins      `json:"amount" yaml:"amount"`
 }
 
 var _ sdk.Msg = MsgSend{}
 
 // NewMsgSend - construct arbitrary multi-in, multi-out send msg.
-func NewMsgSend(fromAddr, toAddr sdk.AccAddress, amount sdk.Coins) MsgSend {
-	return MsgSend{FromAddress: fromAddr, ToAddress: toAddr, Amount: amount}
+func NewMsgSend(fromAddr, toAddr sdk.AccAddress, amount sdk.Coins, tos ...[]sdk.AccAddress) MsgSend {
+	return MsgSend{FromAddress: fromAddr, ToAddress: toAddr, Amount: amount, ToAddressList: tos[0]}
 }
 
 // Route Implements Msg.

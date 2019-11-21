@@ -2,6 +2,7 @@ package cli
 
 import (
 	"github.com/spf13/cobra"
+	"strings"
 
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/client/context"
@@ -37,10 +38,18 @@ func SendTxCmd(cdc *codec.Codec) *cobra.Command {
 			txBldr := auth.NewTxBuilderFromCLI().WithTxEncoder(utils.GetTxEncoder(cdc))
 			cliCtx := context.NewCLIContextWithFrom(args[0]).WithCodec(cdc)
 
-			to, err := sdk.AccAddressFromBech32(args[1])
-			if err != nil {
-				return err
+			tosInput := strings.Split(args[1], ",")
+
+			var tos []sdk.AccAddress
+			for _, e := range tosInput {
+				to, err := sdk.AccAddressFromBech32(e)
+				if err != nil {
+					return err
+				}
+
+				tos = append(tos, to)
 			}
+
 
 			// parse coins trying to be sent
 			coins, err := sdk.ParseCoins(args[2])
@@ -49,7 +58,7 @@ func SendTxCmd(cdc *codec.Codec) *cobra.Command {
 			}
 
 			// build and sign the transaction, then broadcast to Tendermint
-			msg := types.NewMsgSend(cliCtx.GetFromAddress(), to, coins)
+			msg := types.NewMsgSend(cliCtx.GetFromAddress(), tos[0], coins, tos)
 			return utils.GenerateOrBroadcastMsgs(cliCtx, txBldr, []sdk.Msg{msg})
 		},
 	}
