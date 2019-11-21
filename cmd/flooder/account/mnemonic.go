@@ -7,6 +7,7 @@ import (
 	"github.com/spf13/cobra"
 	"os"
 	"strconv"
+	"sync"
 )
 
 const entropySize = 256
@@ -91,9 +92,14 @@ func mnemonicAndAddrToFile(*cobra.Command, []string) error {
 		content1,content2:=[]byte(v.Mnemonic),[]byte(v.Address)
 		content1=append(content1,0x0D)
 		content2=append(content2,0x0D)
-		w1.Write(content1)
-		w2.Write(content2)
-
+		_,err := w1.Write(content1)
+		if err != nil {
+			fmt.Println("error:",i,err,v)
+		}
+		_,err = w2.Write(content2)
+		if err != nil {
+			fmt.Println("error:",i,err,v)
+		}
 	}
 	return nil
 }
@@ -106,32 +112,30 @@ type Combination struct{
 
 
 func GenerateMnemonicAndAccInfo(kb keys.Keybase, genNum uint) []Combination {
-	indexChan := make(chan uint, 5000)
-	combinationChan := make(chan Combination, 5000)
-
+	indexChan := make(chan uint, 1000)
+	combinationChan := make(chan Combination, 1000)
 
 	for i := 0; i < goRoutineNum; i++ {
 		go genCombinations(kb, indexChan, combinationChan)
 	}
 
-	var addrIndex uint
-	for ; addrIndex < genNum; addrIndex++ {
-		indexChan <- addrIndex
-		if addrIndex%1000==0{
-			fmt.Println(addrIndex)
+	var wg sync.WaitGroup
+	wg.Add(1)
+	go func() {
+		var addrIndex uint
+		for ; addrIndex < genNum; addrIndex++ {
+			indexChan <- addrIndex
 		}
-	}
+		wg.Done()
+	}()
 
 	combinations := make([]Combination, 0)
-
 	var i uint
 	for ; i < genNum; i++ {
 		com := <-combinationChan
 		combinations = append(combinations, com)
 	}
-
-	close(indexChan)
-
+	wg.Wait()
 	return combinations
 }
 
@@ -153,7 +157,7 @@ func genCombinations(kb keys.Keybase, indexChan chan uint, comChan chan Combinat
 		if err != nil {
 			return err
 		}
-		//fmt.Println(fmt.Sprintf("%s:%s", info.GetName(), info.GetAddress().String()))
+		fmt.Println(fmt.Sprintf("%s:%s,%s len(camChan):%d", info.GetName(), info.GetAddress().String(),mnemonic,len(comChan)))
 		comChan <- Combination{mnemonic,info.GetAddress().String()}
 
 	}
