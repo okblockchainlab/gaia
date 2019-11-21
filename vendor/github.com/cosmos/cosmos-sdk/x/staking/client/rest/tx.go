@@ -68,7 +68,8 @@ func postDelegationsHandlerFn(cliCtx context.CLIContext) http.HandlerFunc {
 			return
 		}
 
-		msg := types.NewMsgDelegate(req.DelegatorAddress, req.ValidatorAddress, req.Amount)
+		//msg := types.NewMsgDelegate(req.DelegatorAddress, req.ValidatorAddress, req.Amount)
+		msg := types.NewMsgDelegate(req.DelegatorAddress, req.ValidatorAddress, req.Amount,nil)
 		if err := msg.ValidateBasic(); err != nil {
 			rest.WriteErrorResponse(w, http.StatusBadRequest, err.Error())
 			return

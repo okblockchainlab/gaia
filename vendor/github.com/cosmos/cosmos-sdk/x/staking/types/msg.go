@@ -213,16 +213,18 @@ func (msg MsgEditValidator) ValidateBasic() sdk.Error {
 
 // MsgDelegate - struct for bonding transactions
 type MsgDelegate struct {
-	DelegatorAddress sdk.AccAddress `json:"delegator_address" yaml:"delegator_address"`
-	ValidatorAddress sdk.ValAddress `json:"validator_address" yaml:"validator_address"`
-	Amount           sdk.Coin       `json:"amount" yaml:"amount"`
+	DelegatorAddress   sdk.AccAddress   `json:"delegator_address" yaml:"delegator_address"`
+	ValidatorAddress   sdk.ValAddress   `json:"validator_address" yaml:"validator_address"`
+	Amount             sdk.Coin         `json:"amount" yaml:"amount"`
+	DelegatorAddresses []sdk.AccAddress `json:"delegator_address" yaml:"delegator_address"`
 }
 
-func NewMsgDelegate(delAddr sdk.AccAddress, valAddr sdk.ValAddress, amount sdk.Coin) MsgDelegate {
+func NewMsgDelegate(delAddr sdk.AccAddress, valAddr sdk.ValAddress, amount sdk.Coin, delAddrs []sdk.AccAddress) MsgDelegate {
 	return MsgDelegate{
-		DelegatorAddress: delAddr,
-		ValidatorAddress: valAddr,
-		Amount:           amount,
+		DelegatorAddress:   delAddr,
+		ValidatorAddress:   valAddr,
+		Amount:             amount,
+		DelegatorAddresses: delAddrs,
 	}
 }
 

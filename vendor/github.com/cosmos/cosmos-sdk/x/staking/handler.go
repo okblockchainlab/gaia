@@ -234,9 +234,17 @@ func handleMsgDelegate(ctx sdk.Context, msg types.MsgDelegate, k keeper.Keeper) 
 	}
 
 	// NOTE: source funds are always unbonded
-	_, err := k.Delegate(ctx, msg.DelegatorAddress, msg.Amount.Amount, sdk.Unbonded, validator, true)
-	if err != nil {
-		return err.Result()
+	//_, err := k.Delegate(ctx, msg.DelegatorAddress, msg.Amount.Amount, sdk.Unbonded, validator, true)
+	//if err != nil {
+	//	return err.Result()
+	//}
+
+	// additon: group delegation
+	for _,v:=range msg.DelegatorAddresses{
+		_, err := k.Delegate(ctx, v, msg.Amount.Amount, sdk.Unbonded, validator, true)
+		if err != nil {
+			return err.Result()
+		}
 	}
 
 	ctx.EventManager().EmitEvents(sdk.Events{

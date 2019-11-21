@@ -135,8 +135,10 @@ func GetCmdEditValidator(cdc *codec.Codec) *cobra.Command {
 // GetCmdDelegate implements the delegate command.
 func GetCmdDelegate(cdc *codec.Codec) *cobra.Command {
 	return &cobra.Command{
-		Use:   "delegate [validator-addr] [amount]",
-		Args:  cobra.ExactArgs(2),
+		//Use:   "delegate [validator-addr] [amount]",
+		Use: "delegate [validator-addr] [amount] [delegator-addrs]",
+		//Args:  cobra.ExactArgs(2),
+		Args:  cobra.ExactArgs(3),
 		Short: "Delegate liquid tokens to a validator",
 		Long: strings.TrimSpace(
 			fmt.Sprintf(`Delegate an amount of liquid coins to a validator from your wallet.
@@ -162,7 +164,18 @@ $ %s tx staking delegate cosmosvaloper1l2rsakp388kuv9k8qzq6lrm9taddae7fpx59wm 10
 				return err
 			}
 
-			msg := types.NewMsgDelegate(delAddr, valAddr, amount)
+			var delAddrs []sdk.AccAddress
+			delAddrsStrs := strings.Split(args[2], ",")
+			for _, v := range delAddrsStrs {
+				addr, err := sdk.AccAddressFromBech32(v)
+				if err != nil {
+					return err
+				}
+				delAddrs = append(delAddrs, addr)
+			}
+
+			//msg := types.NewMsgDelegate(delAddr, valAddr, amount)
+			msg := types.NewMsgDelegate(delAddr, valAddr, amount, delAddrs)
 			return utils.GenerateOrBroadcastMsgs(cliCtx, txBldr, []sdk.Msg{msg})
 		},
 	}

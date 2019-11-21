@@ -5,6 +5,8 @@ cd /Users/oker/code/src/github.com/cosmos/gaia/dev
 ./start.sh;tail -f nohup.out
 tail -f /Users/oker/code/src/github.com/cosmos/gaia/dev/nohup.out
 
+nohup flooder account save_to_file --number 300000 >> ./output.log 2>&1 &
+
 
 gaiacli query account cosmos16wdljyzt5nvdjwrd06jup9hvc8wwhn5ulsttz8
 gaiacli query account cosmos18dsnjdq53jmk8c7d7w96fczpafjr6xjp5zyrjk
@@ -20,3 +22,6 @@ gaiacli tx staking delegate cosmosvaloper16wdljyzt5nvdjwrd06jup9hvc8wwhn5u6yl7w5
 
 
 gaiacli query account cosmos1wfsqpu02dz5exmzn25yc899435js6wnd9nkmn4
+
+
+gaiacli tx send Turing

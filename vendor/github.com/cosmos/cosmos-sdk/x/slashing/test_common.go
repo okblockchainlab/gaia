@@ -151,5 +151,6 @@ func NewTestMsgCreateValidator(address sdk.ValAddress, pubKey crypto.PubKey, amt
 
 func newTestMsgDelegate(delAddr sdk.AccAddress, valAddr sdk.ValAddress, delAmount sdk.Int) staking.MsgDelegate {
 	amount := sdk.NewCoin(sdk.DefaultBondDenom, delAmount)
-	return staking.NewMsgDelegate(delAddr, valAddr, amount)
+	//return staking.NewMsgDelegate(delAddr, valAddr, amount)
+	return staking.NewMsgDelegate(delAddr, valAddr, amount,nil)
 }
