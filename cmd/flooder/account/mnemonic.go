@@ -28,8 +28,8 @@ func getMnemonicAndAddrToFile() *cobra.Command{
 	}
 
 	flags:=maCmd.Flags()
-	flags.StringVar(&mnemonFilePath,"mnemonic_file_path","prikey","file path of mnemonics")
-	flags.StringVar(&addrFilePath,"address_file_path","addr","file path of addresses")
+	flags.StringVar(&mnemonFilePath,"mnemonic_file_path","prikey.txt","file path of mnemonics")
+	flags.StringVar(&addrFilePath,"address_file_path","addr.txt","file path of addresses")
 	flags.UintVar(&number,"number",1000,"the number of mnemonics&&addresses")
 	return maCmd
 }
@@ -65,31 +65,29 @@ func generateMnemonics(*cobra.Command, []string) error {
 }
 
 func mnemonicAndAddrToFile(*cobra.Command, []string) error {
-	var w1,w2 *os.File
-	var err error
+	os.Remove(mnemonFilePath)
+	os.Remove(addrFilePath)
+	w1,err:=os.OpenFile(mnemonFilePath,os.O_RDWR|os.O_CREATE,0644)
+	if err!=nil{
+		fmt.Println(err)
+		return err
+	}
+	defer w1.Close()
+
+	w2,err:=os.OpenFile(addrFilePath,os.O_RDWR|os.O_CREATE,0644)
+	if err!=nil{
+		fmt.Println(err)
+		return err
+	}
+	defer w2.Close()
+
 	kb := keys.NewInMemory()
+	fmt.Println("generating ...")
 	accs:=GenerateMnemonicAndAccInfo(kb,number)
+	fmt.Println("writing 2 files")
 	for i,v:=range accs{
-		if i%3000==0{
-			if w1 != nil {
-				_ = w1.Close()
-			}
-			if w2 != nil {
-				_ = w2.Close()
-			}
-
-			fmt.Println(fmt.Sprintf("%d file start write ...",i))
-			w1,err=os.OpenFile(mnemonFilePath+strconv.Itoa(i%3000)+".txt",os.O_RDWR|os.O_CREATE,0644)
-			if err!=nil{
-				fmt.Println(err)
-				return err
-			}
-
-			w2,err=os.OpenFile(addrFilePath+strconv.Itoa(i%3000)+".txt",os.O_RDWR|os.O_CREATE,0644)
-			if err!=nil{
-				fmt.Println(err)
-				return err
-			}
+		if i%10000==0{
+			fmt.Println(fmt.Sprintf("%d already ...",i))
 		}
 		content1,content2:=[]byte(v.Mnemonic+"\n"),[]byte(v.Address+"\n")
 		_,err := w1.Write(content1)
