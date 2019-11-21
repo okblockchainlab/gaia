@@ -19,6 +19,7 @@ func GetAccountCmd() *cobra.Command {
 		Long:  "about user accounts",
 	}
 	accCmd.AddCommand(getMnemonicCmd())
+	accCmd.AddCommand(getMnemonicAndAddrToFile())
 	return accCmd
 }
 

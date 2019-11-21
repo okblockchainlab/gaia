@@ -1,7 +1,6 @@
 package account
 
 import (
-	"fmt"
 	"github.com/cosmos/cosmos-sdk/crypto/keys"
 	"github.com/cosmos/go-bip39"
 	"runtime"
@@ -46,6 +45,7 @@ func GenerateAccount(kb keys.Keybase, addrNum uint32) []keys.Info {
 	return accounts
 }
 
+
 func genGoRoutine(kb keys.Keybase, indexChan chan uint32, accChan chan keys.Info) error {
 	for i := range indexChan {
 		seed, err := bip39.NewEntropy(entropySize)
@@ -64,7 +64,7 @@ func genGoRoutine(kb keys.Keybase, indexChan chan uint32, accChan chan keys.Info
 		if err != nil {
 			return err
 		}
-		fmt.Println(fmt.Sprintf("%s:%s", info.GetName(), info.GetAddress().String()))
+		//fmt.Println(fmt.Sprintf("%s:%s", info.GetName(), info.GetAddress().String()))
 		accChan <- info
 
 	}
