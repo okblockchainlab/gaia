@@ -34,7 +34,6 @@ func getMnemonicAndAddrToFile() *cobra.Command{
 	return maCmd
 }
 
-
 func getMnemonicCmd() *cobra.Command {
 	var mnemonicCmd = &cobra.Command{
 		Use:   "mnemonic",
@@ -86,12 +85,7 @@ func mnemonicAndAddrToFile(*cobra.Command, []string) error {
 	accs:=GenerateMnemonicAndAccInfo(kb,number)
 	fmt.Println("writing 2 files")
 	for i,v:=range accs{
-		if i%10000==0{
-			fmt.Println(fmt.Sprintf("%d already ...",i))
-		}
-		content1,content2:=[]byte(v.Mnemonic),[]byte(v.Address)
-		content1=append(content1,0x0D)
-		content2=append(content2,0x0D)
+		content1,content2:=[]byte(v.Mnemonic+"\n"),[]byte(v.Address+"\n")
 		_,err := w1.Write(content1)
 		if err != nil {
 			fmt.Println("error:",i,err,v)
@@ -157,7 +151,7 @@ func genCombinations(kb keys.Keybase, indexChan chan uint, comChan chan Combinat
 		if err != nil {
 			return err
 		}
-		fmt.Println(fmt.Sprintf("%s:%s,%s len(camChan):%d", info.GetName(), info.GetAddress().String(),mnemonic,len(comChan)))
+		//fmt.Println(fmt.Sprintf("%s:%s,%s len(camChan):%d", info.GetName(), info.GetAddress().String(),mnemonic,len(comChan)))
 		comChan <- Combination{mnemonic,info.GetAddress().String()}
 
 	}
