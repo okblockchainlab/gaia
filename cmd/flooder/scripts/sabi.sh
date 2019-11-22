@@ -17,6 +17,6 @@ EOF
 12345678
 EOF
     echo "current:"${VAR} "end"
-    sleep 2
+    sleep 1
     #gaiacli query staking delegation cosmos14jl54akhlykp54nhe6gqppmevevxef7frgz0gx cosmosvaloper16wdljyzt5nvdjwrd06jup9hvc8wwhn5u6yl7w5
 done

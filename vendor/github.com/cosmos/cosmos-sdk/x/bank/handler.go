@@ -2,7 +2,7 @@ package bank
 
 import (
 	"fmt"
-
+	"time"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/x/bank/internal/keeper"
 	"github.com/cosmos/cosmos-sdk/x/bank/internal/types"
@@ -29,6 +29,7 @@ func NewHandler(k keeper.Keeper) sdk.Handler {
 
 // Handle MsgSend.
 func handleMsgSend(ctx sdk.Context, k keeper.Keeper, msg types.MsgSend) sdk.Result {
+	start := time.Now()
 	if !k.GetSendEnabled(ctx) {
 		return types.ErrSendDisabled(k.Codespace()).Result()
 	}
@@ -50,6 +51,7 @@ func handleMsgSend(ctx sdk.Context, k keeper.Keeper, msg types.MsgSend) sdk.Resu
 			sdk.NewAttribute(sdk.AttributeKeyModule, types.AttributeValueCategory),
 		),
 	)
+	fmt.Printf("<perf-bank-hdl>: %fs\n", time.Since(start).Seconds())
 
 	return sdk.Result{Events: ctx.EventManager().Events()}
 }

@@ -1,9 +1,12 @@
 package account
 
 import (
+	"bytes"
 	"fmt"
 	"github.com/cosmos/cosmos-sdk/crypto/keys"
+	"io/ioutil"
 	"os"
+	"path/filepath"
 	"testing"
 )
 
@@ -51,8 +54,8 @@ func TestMultiSend(t *testing.T) {
 	accs := GenerateMnemonicAndAccInfo(kb, 3000)
 	var bz []byte
 	for _, v := range accs {
-		bz=append(bz,[]byte(v.Address)...)
-		bz=append(bz,',')
+		bz = append(bz, []byte(v.Address)...)
+		bz = append(bz, ',')
 	}
 
 	w1, err := os.OpenFile("para.txt", os.O_RDWR|os.O_CREATE, 0644)
@@ -62,4 +65,37 @@ func TestMultiSend(t *testing.T) {
 	}
 	defer w1.Close()
 	w1.Write(bz)
+}
+
+func TestGroupBroadcast(t *testing.T) {
+	pwd, err := os.Getwd()
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+
+	filesInfo, err := ioutil.ReadDir(pwd)
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+
+	var paths []string
+	for i := range filesInfo {
+		paths = append(paths, filepath.Join(pwd, filesInfo[i].Name()))
+	}
+
+	fmt.Println(paths)
+
+	for _, v := range paths {
+		allBytes, err := ioutil.ReadFile(v)
+		if err != nil {
+			fmt.Println(err)
+			return
+		}
+
+		bytes.Split(allBytes, []byte{'\n'})
+
+	}
+
 }

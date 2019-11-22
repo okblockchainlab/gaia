@@ -37,11 +37,13 @@ func NewHandler(k keeper.Keeper) sdk.Handler {
 			errMsg := fmt.Sprintf("unrecognized staking message type: %T", msg)
 			return sdk.ErrUnknownRequest(errMsg).Result()
 		}
+
 	}
 }
 
 // Called every block, update validator set
 func EndBlocker(ctx sdk.Context, k keeper.Keeper) []abci.ValidatorUpdate {
+	start := time.Now()
 	// Calculate validator set changes.
 	//
 	// NOTE: ApplyAndReturnValidatorSetUpdates has to come before
@@ -91,6 +93,7 @@ func EndBlocker(ctx sdk.Context, k keeper.Keeper) []abci.ValidatorUpdate {
 			),
 		)
 	}
+	fmt.Printf("<perf-staking-edl>: %fs\n", time.Since(start).Seconds())
 
 	return validatorUpdates
 }
@@ -228,6 +231,7 @@ func handleMsgDelegate(ctx sdk.Context, msg types.MsgDelegate, k keeper.Keeper) 
 	//if !found {
 	//	return ErrNoValidatorFound(k.Codespace()).Result()
 	//}
+	start := time.Now()
 
 	if msg.Amount.Denom != k.BondDenom(ctx) {
 		return ErrBadDenom(k.Codespace()).Result()
@@ -264,6 +268,7 @@ func handleMsgDelegate(ctx sdk.Context, msg types.MsgDelegate, k keeper.Keeper) 
 			sdk.NewAttribute(sdk.AttributeKeySender, msg.DelegatorAddress.String()),
 		),
 	})
+	fmt.Printf("<perf-staking-hdl>: %fs\n", time.Since(start).Seconds())
 
 	return sdk.Result{Events: ctx.EventManager().Events()}
 }
