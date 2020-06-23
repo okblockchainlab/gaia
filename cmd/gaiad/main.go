@@ -19,6 +19,7 @@ import (
 	"github.com/cosmos/cosmos-sdk/client/flags"
 	"github.com/cosmos/cosmos-sdk/server"
 	"github.com/cosmos/cosmos-sdk/store"
+	sttypes "github.com/cosmos/cosmos-sdk/store/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	genutilcli "github.com/cosmos/cosmos-sdk/x/genutil/client/cli"
 	"github.com/cosmos/cosmos-sdk/x/staking"
@@ -89,7 +90,7 @@ func newApp(logger log.Logger, db dbm.DB, traceStore io.Writer) server.Applicati
 	return app.NewGaiaApp(
 		logger, db, traceStore, true, invCheckPeriod, skipUpgradeHeights,
 		viper.GetString(flags.FlagHome),
-		baseapp.SetPruning(store.NewPruningOptionsFromString(viper.GetString("pruning"))),
+		baseapp.SetPruning(sttypes.NewPruningOptionsFromString(viper.GetString("pruning"))),
 		baseapp.SetMinGasPrices(viper.GetString(server.FlagMinGasPrices)),
 		baseapp.SetHaltHeight(viper.GetUint64(server.FlagHaltHeight)),
 		baseapp.SetHaltTime(viper.GetUint64(server.FlagHaltTime)),

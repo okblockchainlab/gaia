@@ -21,7 +21,7 @@ import (
 
 	"github.com/cosmos/cosmos-sdk/baseapp"
 	"github.com/cosmos/cosmos-sdk/server"
-	"github.com/cosmos/cosmos-sdk/store"
+	sttypes "github.com/cosmos/cosmos-sdk/store/types"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 )
 
@@ -96,7 +96,7 @@ func replayTxs(rootDir string) error {
 	fmt.Fprintln(os.Stderr, "Creating application")
 	gapp := app.NewGaiaApp(
 		ctx.Logger, appDB, traceStoreWriter, true, uint(1), map[int64]bool{}, "",
-		baseapp.SetPruning(store.PruneEverything), // nothing
+		baseapp.SetPruning(sttypes.PruneEverything), // nothing
 	)
 
 	// Genesis
