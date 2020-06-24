@@ -8,7 +8,15 @@ Gaia is the first implementation of the Cosmos Hub, built using the [Cosmos SDK]
 [![LoC](https://tokei.rs/b1/github/cosmos/gaia)](https://github.com/cosmos/gaia)
 [![GolangCI](https://golangci.com/badges/github.com/cosmos/gaia.svg)](https://golangci.com/r/github.com/cosmos/gaia)
 
-
+## Start With Single Node Locally
+```
+gaiacli keys add validator
+gaiad init --chain-id okchain okchain
+gaiad add-genesis-account $(gaiacli keys show validator -a) 1000000000000stake
+gaiad gentx --name validator --amount 900000000000stake
+gaiad collect-gentxs
+gaiad start
+```
 ## Mainnet Full Node Quick Start
 
 This assumes that you're running Linux or MacOS and have installed [Go 1.14+](https://golang.org/dl/).  This guide helps you:
