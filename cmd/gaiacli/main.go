@@ -2,13 +2,13 @@ package main
 
 import (
 	"fmt"
+	"github.com/cosmos/cosmos-sdk/codec/types"
 	authtypes "github.com/cosmos/cosmos-sdk/x/auth/types"
-	"os"
-	"path"
-
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 	"github.com/tendermint/tendermint/libs/cli"
+	"os"
+	"path"
 
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/client/flags"
@@ -58,9 +58,12 @@ func main() {
 		return initConfig(rootCmd)
 	}
 
+	interfaceRegistry := types.NewInterfaceRegistry()
+	marshaler := codec.NewHybridCodec(cdc, interfaceRegistry)
 	clientCtx := client.Context{}
-	clientCtx = clientCtx.
-		WithJSONMarshaler(appCodec).
+	clientCtx = clientCtx.WithJSONMarshaler(appCodec).
+		WithTxGenerator(authtypes.StdTxGenerator{Cdc: cdc}).
+		WithAccountRetriever(authtypes.NewAccountRetriever(marshaler)).
 		WithCodec(cdc)
 
 	// Construct Root Command
